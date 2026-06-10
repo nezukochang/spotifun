@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="Fluxion app icon">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="35%" r="75%">
+      <stop offset="0%" stop-color="#14161D"/>
+      <stop offset="100%" stop-color="#0A0B0F"/>
+    </radialGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <!-- Onde = fluidit� -->
+  <path
+    d="M 220 512 Q 320 380, 420 512 T 620 512 T 820 512"
+    fill="none"
+    stroke="#3D8BFF"
+    stroke-width="48"
+    stroke-linecap="round"
+    filter="url(#glow)"
+  />
+  <!-- Trait vertical = pr�cision -->
+  <line x1="512" y1="340" x2="512" y2="684" stroke="#00E5C8" stroke-width="28" stroke-linecap="round"/>
+  <!-- Point central = robustesse / ancrage -->
+  <circle cx="512" cy="512" r="36" fill="#00E5C8"/>
+</svg>

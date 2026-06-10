@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Env & secrets
+.env
+.env.local
+.env
+Fluxion/src/config/secrets.ts
+*.pem
+
+# React Native
+Fluxion/android/app/build/
+Fluxion/android/.gradle/
+Fluxion/ios/build/
+Fluxion/ios/Pods/
+*.xcuserstate
+.DS_Store
+
+# Offline cache (dev)
+.fluxion-cache/
+
+# Supabase local
+.supabase/
