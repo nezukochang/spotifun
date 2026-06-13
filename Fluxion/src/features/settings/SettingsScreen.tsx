@@ -3,7 +3,6 @@ import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useAuthStore } from '../../stores/authStore';
 import { clearOfflineCache } from '../../services/offline/offlineCacheService';
 import { useOfflineStore } from '../../stores/offlineStore';
-import { env } from '../../config/env';
 import { colors, spacing } from '../../shared/theme/tokens';
 
 export function SettingsScreen() {
@@ -11,7 +10,7 @@ export function SettingsScreen() {
   const refresh = useOfflineStore(s => s.refresh);
   const [language, setLanguage] = React.useState('Français');
   const [isDarkMode, setIsDarkMode] = React.useState(true);
-  const [volume, setVolume] = React.useState(80);
+  const [volume, _setVolume] = React.useState(80);
 
   const clearCache = () => {
     Alert.alert('Vider le cache', 'Supprimer tous les morceaux en cache ?', [

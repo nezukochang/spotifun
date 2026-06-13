@@ -30,6 +30,11 @@ export async function acceptHandoffCode(code: string): Promise<HandoffPayload> {
     throw new Error('Code expiré.');
   }
   await AsyncStorage.removeItem(key);
-  const {expiresAt: _, ...payload} = stored;
+  const payload: HandoffPayload = {
+    sessionId: stored.sessionId,
+    trackId: stored.trackId,
+    positionMs: stored.positionMs,
+    issuedAt: stored.issuedAt,
+  };
   return payload;
 }

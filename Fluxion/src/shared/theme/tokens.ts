@@ -15,6 +15,9 @@ export const colors = {
   textDim: '#A0A7C0',
   success: '#4CAF50',
   warning: '#FFC107',
+  warm: '#FF6B6B',
+  white: '#FFFFFF',
+  gray: '#9E9E9E',
 } as const;
 
 
