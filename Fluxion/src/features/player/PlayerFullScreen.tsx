@@ -31,7 +31,10 @@ export function PlayerFullScreen() {
 
   React.useEffect(() => {
     if (track) {
-      fetchComments(track.id, 0).then(setComments);
+      fetchComments(track.id, 0).then(setComments).catch(e => {
+        console.warn('[Player] Failed to load comments:', e);
+        setComments([]);
+      });
     }
   }, [track]);
 

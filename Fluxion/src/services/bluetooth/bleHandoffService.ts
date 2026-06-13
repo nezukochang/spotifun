@@ -64,7 +64,8 @@ export async function isBleReady(): Promise<boolean> {
     if (!ble) return false;
     const state = await ble.state();
     return state === BLE_STATE_POWERED_ON;
-  } catch {
+  } catch (e) {
+    console.warn('[BLE] Failed to read Bluetooth state:', e);
     return false;
   }
 }
@@ -103,7 +104,8 @@ export async function sendHandoff(
     bleActive = true;
     try {
       await scanNearbyDevices(() => {}, 3000);
-    } catch {
+    } catch (e) {
+      console.warn('[BLE Handoff] Scan failed, falling back to code-only:', e);
       bleActive = false;
     }
   }

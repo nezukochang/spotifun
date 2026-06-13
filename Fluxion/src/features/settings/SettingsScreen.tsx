@@ -19,9 +19,14 @@ export function SettingsScreen() {
         text: 'Vider',
         style: 'destructive',
         onPress: async () => {
-          await clearOfflineCache();
-          await refresh();
-          Alert.alert('OK', 'Cache vidé.');
+          try {
+            await clearOfflineCache();
+            await refresh();
+            Alert.alert('OK', 'Cache vidé.');
+          } catch (e) {
+            console.error('[Settings] Failed to clear cache:', e);
+            Alert.alert('Erreur', e instanceof Error ? e.message : 'Impossible de vider le cache.');
+          }
         },
       },
     ]);

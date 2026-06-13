@@ -24,8 +24,8 @@ export function usePlaybackSync() {
         if (track?.id) {
           setPlaybackMeta({ fromCache: await isTrackCached(track.id) });
         }
-      } catch {
-        // Silent fail if player not ready
+      } catch (e) {
+        console.warn('[PlaybackSync] Failed to read active track:', e);
       }
     });
     return () => sub.remove();

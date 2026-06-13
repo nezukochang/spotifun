@@ -28,7 +28,9 @@ export async function fetchTracks(genreId?: string, sortBy: 'popularity' | 'late
     if (sortBy === 'popularity') list.sort((a, b) => b.popularity - a.popularity);
     return list;
   }
-  const supabase = getSupabase()!;
+  const supabase = getSupabase();
+  if (!supabase) throw new Error('Supabase client not available');
+
   let query = supabase.from('tracks').select(`
     *,
     artists ( name ),
@@ -95,8 +97,8 @@ export async function fetchComments(trackId: string, page: number = 0): Promise<
     return []; // Mock comments if needed
   }
 
-  const supabase = getSupabase()!;
-
+  const supabase = getSupabase();
+  if (!supabase) throw new Error('Supabase client not available');
 
   const { data, error } = await supabase
     .from('comments')
