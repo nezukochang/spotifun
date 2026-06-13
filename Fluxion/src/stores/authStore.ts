@@ -19,8 +19,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   initialized: false,
 
   hydrate: async () => {
-    const user = await authService.getCurrentUser();
-    set({user, initialized: true});
+    try {
+      const user = await authService.getCurrentUser();
+      set({user, initialized: true});
+    } catch (e) {
+      console.error('[Auth] Failed to hydrate session:', e);
+      set({user: null, initialized: true});
+    }
   },
 
   signIn: async (email, password) => {
@@ -44,7 +49,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   signOut: async () => {
-    await authService.signOut();
+    try {
+      await authService.signOut();
+    } catch (e) {
+      console.error('[Auth] Sign-out request failed:', e);
+    }
     set({user: null});
   },
 

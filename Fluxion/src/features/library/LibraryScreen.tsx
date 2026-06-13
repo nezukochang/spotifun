@@ -33,24 +33,34 @@ export function LibraryScreen() {
   });
 
   const playPlaylist = async (playlist: Playlist) => {
-    const all = await fetchTracks();
-    const tracks = playlist.trackIds
-      .map(id => all.find(t => t.id === id))
-      .filter((t): t is Track => !!t);
-    if (tracks.length) {
-      await play(tracks, 0);
+    try {
+      const all = await fetchTracks();
+      const tracks = playlist.trackIds
+        .map(id => all.find(t => t.id === id))
+        .filter((t): t is Track => !!t);
+      if (tracks.length) {
+        await play(tracks, 0);
+      }
+    } catch (e) {
+      console.error('[Library] Failed to play playlist:', e);
+      Alert.alert('Erreur', e instanceof Error ? e.message : 'Impossible de lancer la playlist.');
     }
   };
 
   const cachePlaylist = async (playlist: Playlist) => {
-    for (const id of playlist.trackIds) {
-      const track = MOCK_TRACKS.find(t => t.id === id);
-      if (track && !cachedIds.has(id)) {
-        await cacheTrack(id, track);
+    try {
+      for (const id of playlist.trackIds) {
+        const track = MOCK_TRACKS.find(t => t.id === id);
+        if (track && !cachedIds.has(id)) {
+          await cacheTrack(id, track);
+        }
       }
+      await refresh();
+      Alert.alert('Cache', 'Playlist disponible hors connexion.');
+    } catch (e) {
+      console.error('[Library] Failed to cache playlist:', e);
+      Alert.alert('Erreur', e instanceof Error ? e.message : 'Échec de la mise en cache.');
     }
-    await refresh();
-    Alert.alert('Cache', 'Playlist disponible hors connexion.');
   };
 
   if (isLoading) {
