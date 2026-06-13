@@ -14,19 +14,28 @@ import {colors, spacing} from '../../shared/theme/tokens';
 import {env} from '../../config/env';
 
 export function AuthScreen() {
-  const [email, setEmail] = useState('demo@fluxion.app');
-  const [password, setPassword] = useState('demo1234');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const {signIn, signUp, loading} = useAuthStore();
 
   const submit = async () => {
     setError(null);
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      setError('Adresse email invalide.');
+      return;
+    }
+    if (password.length < 6) {
+      setError('Le mot de passe doit contenir au moins 6 caractères.');
+      return;
+    }
     try {
       if (isSignUp) {
-        await signUp(email, password);
+        await signUp(trimmedEmail, password);
       } else {
-        await signIn(email, password);
+        await signIn(trimmedEmail, password);
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erreur de connexion');

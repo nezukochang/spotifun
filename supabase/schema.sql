@@ -60,11 +60,15 @@ CREATE TABLE IF NOT EXISTS public.playlist_tracks (
 );
 
 -- Views Counter Routine (Trigger or Function)
+-- Restricted to authenticated users only; uses SECURITY INVOKER so RLS applies.
 CREATE OR REPLACE FUNCTION increment_track_views(t_id uuid)
 RETURNS void AS $$
 BEGIN
+  IF auth.uid() IS NULL THEN
+    RAISE EXCEPTION 'Authentication required';
+  END IF;
   UPDATE public.tracks
   SET views = views + 1
   WHERE id = t_id;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY INVOKER;

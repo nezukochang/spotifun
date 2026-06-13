@@ -3,11 +3,10 @@ import { Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useAuthStore } from '../../stores/authStore';
 import { clearOfflineCache } from '../../services/offline/offlineCacheService';
 import { useOfflineStore } from '../../stores/offlineStore';
-import { env } from '../../config/env';
 import { colors, spacing } from '../../shared/theme/tokens';
 
 export function SettingsScreen() {
-  const { user, signOut, setUser } = useAuthStore();
+  const { user, signOut } = useAuthStore();
   const refresh = useOfflineStore(s => s.refresh);
   const [language, setLanguage] = React.useState('Français');
   const [isDarkMode, setIsDarkMode] = React.useState(true);
@@ -28,13 +27,6 @@ export function SettingsScreen() {
     ]);
   };
 
-  const togglePremium = () => {
-    if (user) {
-      setUser({ ...user, isPremium: !user.isPremium });
-      Alert.alert('Spotifun Premium', user.isPremium ? 'Retour à la version standard.' : 'Félicitations ! Vous êtes Premium.');
-    }
-  };
-
   return (
     <View style={styles.root}>
       <Text style={styles.heading}>Réglages</Text>
@@ -43,9 +35,6 @@ export function SettingsScreen() {
         <Text style={styles.sectionTitle}>Profil</Text>
         <Text style={styles.row}>Compte : {user?.displayName}</Text>
         <Text style={styles.row}>Statut : {user?.isPremium ? '🌟 Premium' : 'Standard'}</Text>
-        <Pressable style={styles.premiumBtn} onPress={togglePremium}>
-          <Text style={styles.premiumBtnText}>{user?.isPremium ? 'Gérer mon abonnement' : 'Passer à Premium'}</Text>
-        </Pressable>
       </View>
 
       <View style={styles.section}>
@@ -94,15 +83,6 @@ const styles = StyleSheet.create({
   },
   optionLabel: { color: colors.text, fontSize: 16 },
   optionValue: { color: colors.textDim, fontSize: 14 },
-  premiumBtn: {
-    backgroundColor: colors.accent,
-    borderRadius: 20,
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.lg,
-    marginTop: spacing.md,
-    alignSelf: 'flex-start',
-  },
-  premiumBtnText: { color: colors.void, fontWeight: '700' },
   btn: {
     backgroundColor: colors.surface,
     borderRadius: 12,
