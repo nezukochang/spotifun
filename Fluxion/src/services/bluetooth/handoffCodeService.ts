@@ -3,13 +3,27 @@ import type {HandoffPayload} from '../../types/models';
 
 const PREFIX = '@fluxion/handoff_code:';
 const TTL_MS = 5 * 60 * 1000;
+const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+const CODE_LENGTH = 8;
 
 type Stored = HandoffPayload & {expiresAt: number};
+
+declare const crypto: { getRandomValues<T extends ArrayBufferView>(array: T): T };
+
+function generateSecureCode(): string {
+  const bytes = new Uint8Array(CODE_LENGTH);
+  crypto.getRandomValues(bytes);
+  let code = '';
+  for (let i = 0; i < CODE_LENGTH; i++) {
+    code += CODE_ALPHABET[bytes[i] % CODE_ALPHABET.length];
+  }
+  return code;
+}
 
 export async function publishHandoffCode(
   payload: HandoffPayload,
 ): Promise<string> {
-  const code = Math.random().toString(36).slice(2, 8).toUpperCase();
+  const code = generateSecureCode();
   const stored: Stored = {
     ...payload,
     expiresAt: Date.now() + TTL_MS,
