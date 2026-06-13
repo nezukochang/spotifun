@@ -1,0 +1,16 @@
+diff --git a/node_modules/react-native-reanimated/Common/cpp/reanimated/CSS/interpolation/transforms/TransformOperationInterpolator.cpp b/node_modules/react-native-reanimated/Common/cpp/reanimated/CSS/interpolation/transforms/TransformOperationInterpolator.cpp
+index 19a89ab..f86e9c2 100644
+--- a/node_modules/react-native-reanimated/Common/cpp/reanimated/CSS/interpolation/transforms/TransformOperationInterpolator.cpp
++++ b/node_modules/react-native-reanimated/Common/cpp/reanimated/CSS/interpolation/transforms/TransformOperationInterpolator.cpp
+@@ -207,4 +207,11 @@ template class TransformOperationInterpolator<SkewYOperation>;
+ template class TransformOperationInterpolator<TranslateXOperation>;
+ template class TransformOperationInterpolator<TranslateYOperation>;
+ 
++// Workaround: NDK 27 clang may not instantiate constructors from
++// constrained partial specializations via "template class" alone.
++template TransformOperationInterpolator<TranslateXOperation>::TransformOperationInterpolator(
++    const std::shared_ptr<TranslateXOperation> &, ResolvableValueInterpolatorConfig);
++template TransformOperationInterpolator<TranslateYOperation>::TransformOperationInterpolator(
++    const std::shared_ptr<TranslateYOperation> &, ResolvableValueInterpolatorConfig);
++
+ } // namespace reanimated::css

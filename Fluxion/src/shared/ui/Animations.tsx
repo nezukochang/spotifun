@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, ViewStyle } from 'react-native';
 import Animated, {
     useAnimatedStyle,
     useSharedValue,
@@ -8,7 +8,6 @@ import Animated, {
     withSpring,
     withTiming,
     interpolate,
-    Extrapolate,
 } from 'react-native-reanimated';
 import { colors } from '../theme/tokens';
 
@@ -27,7 +26,7 @@ export const Heartbeat: React.FC<{ children: React.ReactNode }> = ({ children })
             -1,
             true,
         );
-    }, []);
+    }, [scale]);
 
     const animatedStyle = useAnimatedStyle(() => ({
         transform: [{ scale: scale.value }],
@@ -51,7 +50,7 @@ export const Radiance: React.FC<{ size: number; color?: string }> = ({
             -1,
             true,
         );
-    }, []);
+    }, [opacity]);
 
     const animatedStyle = useAnimatedStyle(() => ({
         opacity: opacity.value,
@@ -96,7 +95,7 @@ export const Sparkle: React.FC<{ style?: ViewStyle }> = ({ style }) => {
                 -1,
             ),
         );
-    }, []);
+    }, [scale]);
 
     const animatedStyle = useAnimatedStyle(() => ({
         transform: [{ scale: scale.value }],
@@ -130,7 +129,7 @@ export const MorphingView: React.FC<{
             damping: 15,
             stiffness: 100,
         });
-    }, [expanded]);
+    }, [expanded, progress]);
 
     const animatedStyle = useAnimatedStyle(() => ({
         borderRadius: interpolate(progress.value, [0, 1], [12, 32]),

@@ -14,7 +14,7 @@ import { usePlayerStore } from '../../stores/playerStore';
 import * as playerService from '../../services/audio/playerService';
 import { colors, spacing } from '../../shared/theme/tokens';
 
-import { Radiance, Heartbeat, Sparkle, MorphingView } from '../../shared/ui/Animations';
+import { Radiance, Heartbeat, Sparkle } from '../../shared/ui/Animations';
 import { fetchComments } from '../../services/catalog/catalogService';
 import type { Comment } from '../../types/models';
 
@@ -25,7 +25,6 @@ export function PlayerFullScreen() {
   const isPlaying = usePlayerStore(s => s.isPlaying);
   const positionSec = usePlayerStore(s => s.positionSec);
   const durationSec = usePlayerStore(s => s.durationSec);
-  const fromCache = usePlayerStore(s => s.fromCache);
   const [liked, setLiked] = React.useState(false);
   const [comments, setComments] = React.useState<Comment[]>([]);
   const [showComments, setShowComments] = React.useState(false);

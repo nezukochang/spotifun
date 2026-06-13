@@ -24,7 +24,7 @@ export function usePlaybackSync() {
         if (track?.id) {
           setPlaybackMeta({ fromCache: await isTrackCached(track.id) });
         }
-      } catch (e) {
+      } catch {
         // Silent fail if player not ready
       }
     });

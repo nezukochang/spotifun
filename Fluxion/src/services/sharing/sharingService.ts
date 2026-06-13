@@ -1,5 +1,5 @@
 export class SharingService {
-    async startP2PServer(track: any): Promise<string> {
+    async startP2PServer(_track: any): Promise<string> {
         console.log('Sharing is currently disabled for stability');
         return 'offline-mode';
     }

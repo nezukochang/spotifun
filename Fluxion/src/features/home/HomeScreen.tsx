@@ -1,7 +1,22 @@
-import { ScrollView, Pressable } from 'react-native';
+import React from 'react';
+import {
+  Alert,
+  FlatList,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {useQuery} from '@tanstack/react-query';
+import {fetchTracks} from '../../services/catalog/catalogService';
+import {usePlayTrack} from '../player/usePlayTrack';
+import {useOfflineStore} from '../../stores/offlineStore';
+import {TrackRow} from '../../shared/ui/TrackRow';
 import {LoadingScreen} from '../../shared/ui/LoadingScreen';
 import {alertError} from '../../shared/utils/alertError';
 import {commonStyles} from '../../shared/styles/commonStyles';
+import {colors, spacing} from '../../shared/theme/tokens';
 
 const GENRES = ['Tous', 'Afrobeat', 'Amapiano', 'Makossa', 'Highlife', 'Afrotrap'];
 
