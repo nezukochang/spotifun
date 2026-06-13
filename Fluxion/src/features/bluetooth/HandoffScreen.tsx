@@ -8,6 +8,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
+import {alertError} from '../../shared/utils/alertError';
+import {commonStyles} from '../../shared/styles/commonStyles';
 import {usePlayerStore} from '../../stores/playerStore';
 import {sendHandoff, applyHandoff} from '../../services/bluetooth/bleHandoffService';
 import {acceptHandoffCode} from '../../services/bluetooth/handoffCodeService';
@@ -38,7 +40,7 @@ export function HandoffScreen() {
         }`,
       );
     } catch (e) {
-      Alert.alert('Erreur', e instanceof Error ? e.message : 'Échec handoff');
+      alertError(e, 'Échec handoff');
     } finally {
       setLoading(false);
     }
@@ -51,14 +53,14 @@ export function HandoffScreen() {
       await applyHandoff(payload);
       Alert.alert('Succès', 'Lecture reprise sur cet appareil.');
     } catch (e) {
-      Alert.alert('Erreur', e instanceof Error ? e.message : 'Code invalide');
+      alertError(e, 'Code invalide');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <View style={styles.root}>
+    <View style={commonStyles.screenRootPadded}>
       <Text style={styles.heading}>Partage de lecture</Text>
       <Text style={styles.desc}>
         Envoyez la session en cours (métadonnées + position) — pas de fichier
@@ -72,13 +74,13 @@ export function HandoffScreen() {
       )}
 
       <Pressable
-        style={[styles.btn, loading && styles.btnDisabled]}
+        style={[commonStyles.primaryButton, styles.btnMargin, loading && commonStyles.primaryButtonDisabled]}
         onPress={onSend}
         disabled={loading}>
         {loading ? (
           <ActivityIndicator color="#fff" />
         ) : (
-          <Text style={styles.btnText}>Générer code & scanner BLE</Text>
+          <Text style={commonStyles.primaryButtonText}>Générer code & scanner BLE</Text>
         )}
       </Pressable>
 
@@ -90,7 +92,7 @@ export function HandoffScreen() {
 
       <Text style={styles.label}>Recevoir avec un code</Text>
       <TextInput
-        style={styles.input}
+        style={[commonStyles.input, styles.inputExtra]}
         placeholder="Ex. A3X9K2"
         placeholderTextColor={colors.muted}
         autoCapitalize="characters"
@@ -110,23 +112,12 @@ export function HandoffScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: colors.void,
-    padding: spacing.lg,
-  },
   heading: {color: colors.text, fontSize: 24, fontWeight: '700'},
   desc: {color: colors.textDim, marginTop: spacing.sm, lineHeight: 22},
   now: {color: colors.precision, marginTop: spacing.md},
-  btn: {
-    backgroundColor: colors.accent,
-    borderRadius: 12,
-    padding: spacing.md,
-    alignItems: 'center',
+  btnMargin: {
     marginTop: spacing.lg,
   },
-  btnDisabled: {opacity: 0.6},
-  btnText: {color: '#fff', fontWeight: '700'},
   code: {
     color: colors.precision,
     fontSize: 22,
@@ -141,11 +132,7 @@ const styles = StyleSheet.create({
     marginVertical: spacing.xl,
   },
   label: {color: colors.text, fontWeight: '600', marginBottom: spacing.sm},
-  input: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
-    color: colors.text,
+  inputExtra: {
     marginBottom: spacing.md,
   },
   btnSecondary: {
