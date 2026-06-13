@@ -1,4 +1,3 @@
-import {BleManager, Device, State} from 'react-native-ble-plx';
 import {PermissionsAndroid, Platform} from 'react-native';
 import type {HandoffPayload, Track} from '../../types/models';
 import {env} from '../../config/env';
@@ -6,13 +5,35 @@ import {getMockTrackById} from '../mock/catalog';
 import {handoffPlay} from '../audio/playerService';
 import {publishHandoffCode} from './handoffCodeService';
 
+type BleManagerLike = {
+  state: () => Promise<string>;
+  startDeviceScan: (
+    uuids: null,
+    opts: {allowDuplicates: boolean},
+    cb: (error: Error | null, device: BleDevice | null) => void,
+  ) => void;
+  stopDeviceScan: () => void;
+};
+
+type BleDevice = {
+  id: string;
+  name: string | null;
+  localName: string | null;
+};
+
 const DEVICE_NAME_PREFIX = 'Fluxion';
+const BLE_STATE_POWERED_ON = 'PoweredOn';
 
-let manager: BleManager | null = null;
+let manager: BleManagerLike | null = null;
 
-function getManager(): BleManager {
+function getManager(): BleManagerLike | null {
   if (!manager) {
-    manager = new BleManager();
+    try {
+      const {BleManager} = require('react-native-ble-plx');
+      manager = new BleManager();
+    } catch {
+      return null;
+    }
   }
   return manager;
 }
@@ -39,8 +60,10 @@ export async function requestBlePermissions(): Promise<boolean> {
 
 export async function isBleReady(): Promise<boolean> {
   try {
-    const state = await getManager().state();
-    return state === State.PoweredOn;
+    const ble = getManager();
+    if (!ble) return false;
+    const state = await ble.state();
+    return state === BLE_STATE_POWERED_ON;
   } catch {
     return false;
   }
@@ -90,10 +113,13 @@ export async function sendHandoff(
 }
 
 export async function scanNearbyDevices(
-  onDevice: (device: Device) => void,
+  onDevice: (device: BleDevice) => void,
   timeoutMs = 8000,
 ): Promise<void> {
   const ble = getManager();
+  if (!ble) {
+    throw new Error('Bluetooth non disponible.');
+  }
   const ready = await isBleReady();
   if (!ready) {
     throw new Error('Bluetooth désactivé.');
