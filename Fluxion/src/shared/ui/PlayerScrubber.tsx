@@ -1,18 +1,13 @@
 import React, {useCallback, useState} from 'react';
 import {LayoutChangeEvent, Pressable, StyleSheet, Text, View} from 'react-native';
 import {colors} from '../theme/tokens';
+import {formatSec} from '../utils/formatTime';
 
 type Props = {
   positionSec: number;
   durationSec: number;
   onSeek: (sec: number) => void;
 };
-
-function fmt(sec: number) {
-  const m = Math.floor(sec / 60);
-  const s = Math.floor(sec % 60);
-  return `${m}:${s.toString().padStart(2, '0')}`;
-}
 
 export function PlayerScrubber({positionSec, durationSec, onSeek}: Props) {
   const [width, setWidth] = useState(1);
@@ -38,8 +33,8 @@ export function PlayerScrubber({positionSec, durationSec, onSeek}: Props) {
         <View style={[styles.thumb, {left: ratio * width - 8}]} />
       </Pressable>
       <View style={styles.labels}>
-        <Text style={styles.time}>{fmt(positionSec)}</Text>
-        <Text style={styles.time}>{fmt(durationSec)}</Text>
+        <Text style={styles.time}>{formatSec(positionSec)}</Text>
+        <Text style={styles.time}>{formatSec(durationSec)}</Text>
       </View>
     </View>
   );

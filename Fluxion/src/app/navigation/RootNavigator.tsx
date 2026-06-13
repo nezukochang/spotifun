@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import type { MainTabParamList, RootStackParamList } from './types';
 import { navigationRef, navigateToPlayer } from './navigationRef';
 import { AuthScreen } from '../../features/auth/AuthScreen';
@@ -21,6 +21,7 @@ import { useNetworkStatus } from '../../hooks/useNetworkStatus';
 import { useOfflineStore } from '../../stores/offlineStore';
 import * as playerService from '../../services/audio/playerService';
 import { colors } from '../../shared/theme/tokens';
+import { LoadingScreen } from '../../shared/ui/LoadingScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -138,17 +139,7 @@ export function RootNavigator() {
 
 
   if (!initialized) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: colors.void,
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <ActivityIndicator size="large" color={colors.accent} />
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   return (

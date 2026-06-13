@@ -12,6 +12,7 @@ import {searchTracks} from '../../services/catalog/catalogService';
 import {TrackRow} from '../../shared/ui/TrackRow';
 import {usePlayTrack} from '../player/usePlayTrack';
 import {colors, spacing} from '../../shared/theme/tokens';
+import {commonStyles} from '../../shared/styles/commonStyles';
 
 export function SearchScreen() {
   const [query, setQuery] = useState('');
@@ -24,10 +25,10 @@ export function SearchScreen() {
   });
 
   return (
-    <View style={styles.root}>
-      <Text style={styles.heading}>Rechercher</Text>
+    <View style={commonStyles.screenRoot}>
+      <Text style={[commonStyles.heading, styles.headingExtra]}>Rechercher</Text>
       <TextInput
-        style={styles.input}
+        style={[commonStyles.input, styles.inputExtra]}
         placeholder="Morceau, artiste, album…"
         placeholderTextColor={colors.muted}
         value={query}
@@ -48,30 +49,21 @@ export function SearchScreen() {
             onPress={() => play(data ?? [], index)}
           />
         )}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={commonStyles.listContent}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {flex: 1, backgroundColor: colors.void},
-  heading: {
-    color: colors.text,
-    fontSize: 28,
-    fontWeight: '700',
-    padding: spacing.lg,
+  headingExtra: {
     paddingBottom: spacing.sm,
   },
-  input: {
+  inputExtra: {
     marginHorizontal: spacing.lg,
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
-    color: colors.text,
     marginBottom: spacing.sm,
   },
   loader: {marginVertical: spacing.sm},
   empty: {color: colors.muted, textAlign: 'center', marginTop: 40},
-  list: {paddingBottom: 120},
+
 });

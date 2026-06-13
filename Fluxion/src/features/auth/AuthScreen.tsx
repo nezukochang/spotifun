@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import {useAuthStore} from '../../stores/authStore';
 import {colors, spacing} from '../../shared/theme/tokens';
+import {commonStyles} from '../../shared/styles/commonStyles';
 import {env} from '../../config/env';
 
 export function AuthScreen() {
@@ -50,7 +51,7 @@ export function AuthScreen() {
       )}
 
       <TextInput
-        style={styles.input}
+        style={[commonStyles.input, styles.inputExtra]}
         placeholder="Email"
         placeholderTextColor={colors.muted}
         autoCapitalize="none"
@@ -59,7 +60,7 @@ export function AuthScreen() {
         onChangeText={setEmail}
       />
       <TextInput
-        style={styles.input}
+        style={[commonStyles.input, styles.inputExtra]}
         placeholder="Mot de passe"
         placeholderTextColor={colors.muted}
         secureTextEntry
@@ -70,13 +71,13 @@ export function AuthScreen() {
       {error && <Text style={styles.error}>{error}</Text>}
 
       <Pressable
-        style={[styles.btn, loading && styles.btnDisabled]}
+        style={[commonStyles.primaryButton, styles.btnMargin, loading && commonStyles.primaryButtonDisabled]}
         onPress={submit}
         disabled={loading}>
         {loading ? (
           <ActivityIndicator color="#fff" />
         ) : (
-          <Text style={styles.btnText}>
+          <Text style={[commonStyles.primaryButtonText, styles.btnTextExtra]}>
             {isSignUp ? 'Créer un compte' : 'Se connecter'}
           </Text>
         )}
@@ -111,22 +112,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: spacing.sm,
   },
-  input: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: spacing.md,
-    color: colors.text,
+  inputExtra: {
     fontSize: 16,
   },
-  btn: {
-    backgroundColor: colors.accent,
-    borderRadius: 12,
-    padding: spacing.md,
-    alignItems: 'center',
+  btnMargin: {
     marginTop: spacing.sm,
   },
-  btnDisabled: {opacity: 0.6},
-  btnText: {color: '#fff', fontWeight: '700', fontSize: 16},
+  btnTextExtra: {fontSize: 16},
   switch: {color: colors.accentGlow, textAlign: 'center', marginTop: spacing.md},
   error: {color: colors.warm, textAlign: 'center'},
 });

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import type {Track} from '../../types/models';
 import {colors, spacing} from '../theme/tokens';
+import {formatMs} from '../utils/formatTime';
 
 type Props = {
   track: Track;
@@ -18,12 +19,6 @@ type Props = {
   onPress: () => void;
   onLongPress?: () => void;
 };
-
-function formatMs(ms: number) {
-  const m = Math.floor(ms / 60000);
-  const s = Math.floor((ms % 60000) / 1000);
-  return `${m}:${s.toString().padStart(2, '0')}`;
-}
 
 export function TrackRow({
   track,

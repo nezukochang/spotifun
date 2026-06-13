@@ -1,8 +1,8 @@
-import type { Playlist, Track, Comment } from '../../types/models';
+import type {Playlist, Track, Comment} from '../../types/models';
 
-import { env } from '../../config/env';
-import { getSupabase } from '../supabase/client';
-import { MOCK_PLAYLISTS, MOCK_TRACKS } from '../mock/catalog';
+import {env} from '../../config/env';
+import {getSupabase} from '../supabase/client';
+import {MOCK_PLAYLISTS, MOCK_TRACKS} from '../mock/catalog';
 
 interface SupabaseRow {
   id: string;
@@ -66,6 +66,27 @@ export async function fetchTracks(genreId?: string, sortBy: 'popularity' | 'late
   }));
 }
 
+
+export async function fetchPlaylists(userId: string): Promise<Playlist[]> {
+  if (env.useMockData) {
+    return MOCK_PLAYLISTS;
+  }
+  const supabase = getSupabase()!;
+  const {data, error} = await supabase
+    .from('playlists')
+    .select('*')
+    .eq('user_id', userId);
+  if (error) {
+    throw error;
+  }
+  return (data ?? []).map((row: {id: string; title: string; description?: string; cover_url: string; track_ids: string[]}) => ({
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    coverUrl: row.cover_url,
+    trackIds: row.track_ids,
+  }));
+}
 
 export async function fetchComments(trackId: string, page: number = 0): Promise<Comment[]> {
   const PAGE_SIZE = 20;

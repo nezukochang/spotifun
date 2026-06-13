@@ -1,4 +1,7 @@
 import { ScrollView, Pressable } from 'react-native';
+import {LoadingScreen} from '../../shared/ui/LoadingScreen';
+import {alertError} from '../../shared/utils/alertError';
+import {commonStyles} from '../../shared/styles/commonStyles';
 
 const GENRES = ['Tous', 'Afrobeat', 'Amapiano', 'Makossa', 'Highlife', 'Afrotrap'];
 
@@ -17,15 +20,11 @@ export function HomeScreen() {
   const cacheTrack = useOfflineStore(s => s.cacheTrack);
 
   if (isLoading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color={colors.accent} />
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   return (
-    <View style={styles.root}>
+    <View style={commonStyles.screenRoot}>
       <Text style={styles.heading}>Spotifun afroPUNK</Text>
 
       <View style={styles.filterSection}>
@@ -66,20 +65,19 @@ export function HomeScreen() {
                 return;
               }
               cacheTrack(item.id, item).catch(e =>
-                Alert.alert('Erreur', e instanceof Error ? e.message : 'Échec'),
+                alertError(e, 'Échec'),
               );
             }}
           />
         )}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={[commonStyles.listContent, styles.listTop]}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.void },
-  center: { flex: 1, backgroundColor: colors.void, alignItems: 'center', justifyContent: 'center' },
+
   heading: {
     color: colors.text,
     fontSize: 28,
@@ -118,6 +116,6 @@ const styles = StyleSheet.create({
   },
   sortText: { color: colors.muted, fontSize: 13, fontWeight: '700' },
   sortActive: { color: colors.precision },
-  list: { paddingBottom: 120, paddingTop: spacing.sm },
+  listTop: { paddingTop: spacing.sm },
 });
 

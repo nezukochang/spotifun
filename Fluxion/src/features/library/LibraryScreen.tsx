@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  ActivityIndicator,
   Alert,
   FlatList,
   Image,
@@ -16,6 +15,8 @@ import {usePlayTrack} from '../player/usePlayTrack';
 import {useOfflineStore} from '../../stores/offlineStore';
 import {MOCK_TRACKS} from '../../services/mock/catalog';
 import {colors, spacing} from '../../shared/theme/tokens';
+import {LoadingScreen} from '../../shared/ui/LoadingScreen';
+import {commonStyles} from '../../shared/styles/commonStyles';
 import type {Playlist, Track} from '../../types/models';
 
 export function LibraryScreen() {
@@ -53,20 +54,17 @@ export function LibraryScreen() {
   };
 
   if (isLoading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator color={colors.accent} />
-      </View>
-    );
+    return <LoadingScreen />;
   }
 
   return (
-    <View style={styles.root}>
-      <Text style={styles.heading}>Bibliothèque</Text>
+    <View style={commonStyles.screenRoot}>
+      <Text style={commonStyles.heading}>Bibliothèque</Text>
       <FlatList
         data={playlists ?? []}
         keyExtractor={p => p.id}
         contentContainerStyle={styles.list}
+
         renderItem={({item}) => (
           <View style={styles.card}>
             <Pressable onPress={() => playPlaylist(item)}>
@@ -87,14 +85,7 @@ export function LibraryScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: {flex: 1, backgroundColor: colors.void},
-  center: {flex: 1, justifyContent: 'center', alignItems: 'center'},
-  heading: {
-    color: colors.text,
-    fontSize: 28,
-    fontWeight: '700',
-    padding: spacing.lg,
-  },
+
   list: {paddingHorizontal: spacing.lg, paddingBottom: 120, gap: spacing.lg},
   card: {
     backgroundColor: colors.surface,
